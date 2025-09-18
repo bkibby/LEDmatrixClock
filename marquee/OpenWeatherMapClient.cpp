@@ -141,7 +141,7 @@ void OpenWeatherMapClient::updateWeather() {
 
   // Wait for data, with timeout
   uint32_t start = millis();
-  const int timeout_ms = 2000;
+  const int timeout_ms = 5000;
   while (weatherClient.connected() &&
         !weatherClient.available() &&
         ((millis()-start) < timeout_ms))
