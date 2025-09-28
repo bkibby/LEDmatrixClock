@@ -8,11 +8,11 @@
  * 20250628 rob040   Completely changed this OWM client API and OWM access API to use the Free Service
  * 20250712 rob040   Revised data invalidation and data get retry count until data invalid error. New API dataGetRetryCount(), removed API getCached().
  * 20250714 rob040   add more options for geo location; it is no longer centered around CityID, Class Ctor does not need CityID, new method setGeoLocation()
- *
+ * Further: See git log
  */
 
 #include "OpenWeatherMapClient.h"
-#include "timeStr.h"
+#include "TimeStr.h"
 
 OpenWeatherMapClient::OpenWeatherMapClient(const String &ApiKey, bool isMetric) {
   myGeoLocation = "";
@@ -52,8 +52,8 @@ int OpenWeatherMapClient::setGeoLocation(const String &location) {
     else if (ch == ' ' || ch == '-'|| ch == '('|| ch == ')') ch_cnt_letters++;
     else if (ch != ',') {
       ch_cnt_notallowed++;
-      //Serial.print("Inval 0x");
-      //Serial.println(ch,HEX);
+      Serial.print(F("Inval 0x"));
+      Serial.println(ch,HEX);
     }
   }
 
@@ -67,7 +67,7 @@ int OpenWeatherMapClient::setGeoLocation(const String &location) {
     myGeoLocationType = LOC_CITYID;
     // USE http://api.openweathermap.org/data/2.5/weather?id={city-id}&appid={API-key}
   }
-  if ((len > 5) && (comma > 0) && (comma2 == 0) && (ch_cnt_digits >= len-3)) {
+  if ((len > 5) && (comma > 0) && (comma2 == comma) && (ch_cnt_digits >= len-3)) {
     myGeoLocationType = LOC_LATLON;
     myGeoLocation_lat = location.toFloat();
     myGeoLocation_lon = location.substring(comma+1).toFloat();
@@ -80,6 +80,9 @@ int OpenWeatherMapClient::setGeoLocation(const String &location) {
     // USE http://api.openweathermap.org/data/2.5/weather?q={city-name},{country-code}&appid={API-key}
     // USE http://api.openweathermap.org/data/2.5/weather?q={city-name},{state-code},{country-code}&appid={API-key}
     // those will also get the lat,lon
+  }
+  if (myGeoLocationType == LOC_UNKNOWN) {
+    Serial.printf_P(PSTR("loc=%s,c=%d,c2=%d,len=%d,dec=%d,cd=%d,cl=%d,cn=%d\n"), location.c_str(),comma,comma2,len,decimal,ch_cnt_digits,ch_cnt_letters,ch_cnt_notallowed);
   }
   return (myGeoLocationType <= LOC_UNKNOWN);
 }

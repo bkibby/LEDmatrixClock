@@ -7,7 +7,7 @@
 
 // Wifi Manager Lite
 // ESP Accesspoint hostname by ESP_WifiManager_Lite; The device MAC address will be added
-#define AP_HOSTNAME_BASE "CLOCK-"
+#define AP_HOSTNAME_BASE                          "CLOCK-"
 #define ESP_WM_LITE_DEBUG_OUTPUT                  Serial
 #define _ESP_WM_LITE_LOGLEVEL_                    -1
 #define USE_LED_BUILTIN                           true
@@ -76,4 +76,4 @@
   "LED matrix Clock", 0 };
 
 //#include <ESP_WiFiManager_Lite.h> // --> https://github.com/khoih-prog/ESP_WiFiManager_Lite (Archived) --> ../lib/ESP_WiFiManager_Lite.h
-//#include "dynamicParams.h"
+//#include "DynamicParams.h"
